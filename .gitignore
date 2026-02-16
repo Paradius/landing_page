@@ -1,0 +1,13 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.cursor/
+.vscode/
+*.swp
+*.swo
+
+# Node (from npx serve)
+node_modules/
