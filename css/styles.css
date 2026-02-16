@@ -58,10 +58,14 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   overflow-x: hidden;
 }
+
+html.menu-open {
+  overflow: hidden;
+}
+
 
 body {
   position: relative;
@@ -73,6 +77,7 @@ body {
   background-color: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
 }
 
 /* Circuit tree: scrolls with content, larger than page for expansion feel.
@@ -426,9 +431,6 @@ svg {
 .philosophy {
   position: relative;
   padding-block: var(--space-3xl);
-  contain: layout style;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
 }
 
 .philosophy__container {
@@ -479,9 +481,6 @@ svg {
    ========================================================================== */
 .expertise {
   padding-block: var(--space-3xl);
-  contain: layout style;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 600px;
 }
 
 .expertise__container {
@@ -523,7 +522,6 @@ svg {
   padding: var(--space-xl) var(--space-lg);
   background-color: var(--color-surface);
   border: 1px solid var(--color-divider);
-  contain: content;
   transition:
     border-color var(--transition-base),
     transform var(--transition-base),
@@ -647,6 +645,15 @@ svg {
    RESPONSIVE
    ========================================================================== */
 
+/* Medium screens (tablets, small laptops) */
+@media (max-width: 1024px) {
+  .hero {
+    min-height: 70vh;
+    min-height: 70dvh;
+    padding-block: 8rem 4rem;
+  }
+}
+
 /* Tablet */
 @media (max-width: 768px) {
   :root {
@@ -655,11 +662,21 @@ svg {
   }
 
   .hero {
-    padding-block: 7rem 5rem;
+    min-height: auto;
+    padding-block: 7rem 2.5rem;
   }
 
   .hero__tagline {
     max-width: 90vw;
+    width: 80vw;
+  }
+
+  .hero__subtitle {
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__cta {
+    padding: 0.75rem 2rem;
   }
 
   body::after,
@@ -673,6 +690,12 @@ svg {
 
   body::before {
     opacity: 0.08;
+  }
+
+  .header--scrolled {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: rgba(0, 0, 0, 0.95);
   }
 
   .header__logo-svg {
@@ -704,12 +727,11 @@ svg {
   .header__nav {
     position: fixed;
     inset: 0;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.95);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    background-color: #000000;
     opacity: 0;
     visibility: hidden;
     transition:
@@ -738,16 +760,18 @@ svg {
 @media (max-width: 480px) {
   :root {
     --container-padding: 1.25rem;
-    --space-3xl: 4rem;
+    --space-3xl: 3rem;
+    --space-2xl: 2.5rem;
   }
 
   .hero {
-    min-height: 90vh;
-    min-height: 90dvh;
+    min-height: auto;
+    padding-block: 5rem 2rem;
   }
 
   .hero__tagline {
     max-width: 95vw;
+    width: 90vw;
   }
 
   body::after,
