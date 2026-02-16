@@ -168,10 +168,15 @@
   <meta name="apple-mobile-web-app-title" content="Paradius">
   <meta name="application-name" content="Paradius">
 
-  <!-- Fonts: Preconnect + Load -->
+  <!-- Preload critical assets (LCP + custom font) -->
+  <link rel="preload" href="assets/ParadiusDawn-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/architecting_the_dawn_from_within.svg" as="image">
+
+  <!-- Fonts: Preconnect + Non-render-blocking load -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
@@ -207,7 +212,7 @@
       <div class="hero__backdrop" aria-hidden="true"></div>
       <div class="hero__container">
         <h1 id="hero-heading" class="sr-only">Paradius — Architecting the Dawn from Within | Software Engineering Consultancy</h1>
-        <img class="hero__tagline" src="assets/architecting_the_dawn_from_within.svg" alt="Paradius: Architecting the Dawn from Within" width="288" height="97">
+        <img class="hero__tagline" src="assets/architecting_the_dawn_from_within.svg" alt="Paradius: Architecting the Dawn from Within" width="288" height="97" fetchpriority="high" decoding="async">
         <p class="hero__subtitle">
           Engineering as an act of will. Beyond utility.
         </p>

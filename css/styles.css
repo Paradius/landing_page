@@ -76,70 +76,88 @@ body {
 }
 
 /* Circuit tree: scrolls with content, larger than page for expansion feel.
-   Deliberately oversized so branches extend beyond viewport on all sides.
-   Two layers: dim base (::after) + shimmer sweep (::before) for pulse effect. */
+   Uses mask-image instead of filter:invert for GPU-friendly rendering.
+   Two layers: dim base (::after) + shimmer sweep (::before) for pulse. */
 body::after {
   content: '';
   position: absolute;
   top: -20vh;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   width: 195vw;
   height: calc(100% + 40vh);
-  background: url('../assets/circuit_tree_full.svg') no-repeat center center / contain;
-  filter: invert(1);
+  background-color: #fff;
   opacity: 0.04;
   pointer-events: none;
   z-index: 0;
+  contain: strict;
+  -webkit-mask-image: url('../assets/circuit_tree_full.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
+  mask-image: url('../assets/circuit_tree_full.svg');
+  mask-repeat: no-repeat;
+  mask-position: center center;
+  mask-size: contain;
 }
 
-/* Shimmer layer: soft heartbeat glow that sweeps slowly bottom→top */
+/* Shimmer layer: soft heartbeat glow that sweeps slowly bottom→top.
+   Combines tree shape + gradient sweep via mask-composite (intersect). */
 body::before {
   content: '';
   position: absolute;
   top: -20vh;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
   width: 195vw;
   height: calc(100% + 40vh);
-  background: url('../assets/circuit_tree_full.svg') no-repeat center center / contain;
-  filter: invert(1);
+  background-color: #fff;
   opacity: 0.10;
   pointer-events: none;
   z-index: 0;
-  -webkit-mask-image: linear-gradient(
-    to top,
-    transparent 0%,
-    rgba(255,255,255,0.15) 30%,
-    rgba(255,255,255,0.4) 45%,
-    rgba(255,255,255,0.4) 55%,
-    rgba(255,255,255,0.15) 70%,
-    transparent 100%
-  );
-  -webkit-mask-size: 100% 350%;
-  -webkit-mask-repeat: no-repeat;
-  mask-image: linear-gradient(
-    to top,
-    transparent 0%,
-    rgba(255,255,255,0.15) 30%,
-    rgba(255,255,255,0.4) 45%,
-    rgba(255,255,255,0.4) 55%,
-    rgba(255,255,255,0.15) 70%,
-    transparent 100%
-  );
-  mask-size: 100% 350%;
-  mask-repeat: no-repeat;
+  will-change: mask-position, -webkit-mask-position;
+  contain: strict;
+  -webkit-mask-image:
+    url('../assets/circuit_tree_full.svg'),
+    linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(255,255,255,0.15) 30%,
+      rgba(255,255,255,0.4) 45%,
+      rgba(255,255,255,0.4) 55%,
+      rgba(255,255,255,0.15) 70%,
+      transparent 100%
+    );
+  -webkit-mask-size: contain, 100% 350%;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-position: center center, center 280%;
+  -webkit-mask-composite: source-in;
+  mask-image:
+    url('../assets/circuit_tree_full.svg'),
+    linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(255,255,255,0.15) 30%,
+      rgba(255,255,255,0.4) 45%,
+      rgba(255,255,255,0.4) 55%,
+      rgba(255,255,255,0.15) 70%,
+      transparent 100%
+    );
+  mask-size: contain, 100% 350%;
+  mask-repeat: no-repeat, no-repeat;
+  mask-position: center center, center 280%;
+  mask-composite: intersect;
   animation: tree-pulse 18s ease-in-out infinite;
 }
 
 @keyframes tree-pulse {
   0%, 30% {
-    -webkit-mask-position: center 280%;
-    mask-position: center 280%;
+    -webkit-mask-position: center center, center 280%;
+    mask-position: center center, center 280%;
   }
   80%, 100% {
-    -webkit-mask-position: center -180%;
-    mask-position: center -180%;
+    -webkit-mask-position: center center, center -180%;
+    mask-position: center center, center -180%;
   }
 }
 
@@ -303,6 +321,7 @@ svg {
   animation: hero-glow 12s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
+  will-change: opacity, transform;
 }
 
 @keyframes hero-glow {
@@ -407,6 +426,9 @@ svg {
 .philosophy {
   position: relative;
   padding-block: var(--space-3xl);
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
 }
 
 .philosophy__container {
@@ -457,6 +479,9 @@ svg {
    ========================================================================== */
 .expertise {
   padding-block: var(--space-3xl);
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 .expertise__container {
@@ -498,6 +523,7 @@ svg {
   padding: var(--space-xl) var(--space-lg);
   background-color: var(--color-surface);
   border: 1px solid var(--color-divider);
+  contain: content;
   transition:
     border-color var(--transition-base),
     transform var(--transition-base),
